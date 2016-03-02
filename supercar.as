@@ -5,8 +5,11 @@
 		
 	public class supercar extends MovieClip {
 
-		var snelheid: int = 200;
+		var snelheid: int = 150;
 		var directie: int = 0;
+		var directieY: int = 0;
+		var min: int = 0;
+		var max: int = 0;
 		
 		function ingedrukt(event:KeyboardEvent):void
 		{
@@ -14,13 +17,17 @@
 			if(event.keyCode == Keyboard.LEFT) directie = -1;
 			//Beweeg naar links
 			if(event.keyCode == Keyboard.RIGHT) directie = 1;
-			
-			trace(directie);
+			//Beweeg naar voren
+			if(event.keyCode == Keyboard.UP) directieY = -1;
+			//Beweeg naar voren
+			if(event.keyCode == Keyboard.DOWN) directieY = 1;
 		}
+		
 		
 		function nietingedrukt(event:KeyboardEvent):void
 		{
 			if(event.keyCode == Keyboard.LEFT || event.keyCode == Keyboard.RIGHT) directie = 0;
+			if(event.keyCode == Keyboard.UP || event.keyCode == Keyboard.DOWN) directieY = 0;
 		}
 		
 		function init(e:Event):void
@@ -33,13 +40,28 @@
 		function loop (e:Event):void
 		{
 			this.x += directie * snelheid / stage.frameRate;
-			trace(this.x);		
-			}
+			this.y += directieY * snelheid / stage.frameRate;
+			
+			//De auto mag niet buiten de witte lijnen 
+			if(this.x < min)
+				this.x = min;
+			
+			if(this.x > max)
+				this.x = max;
+				
+			if(this.y > stage.stageHeight - 100)
+				this.y = stage.stageHeight - 100;
+			
+			if(this.y < 200)
+				this.y = 200;
+			
+		}
 		
-		public function supercar() 
+		public function supercar(min:int, max:int) 
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
-			
+			this.min = min;
+			this.max = max;
 		}
 
 	}
