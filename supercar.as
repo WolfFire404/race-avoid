@@ -2,9 +2,12 @@
 	import flash.display.MovieClip;
 	import flash.ui.Keyboard;
 	import flash.events.*;
+	import flash.utils.Timer;
 		
 	public class supercar extends MovieClip {
 
+		public var crashed:Boolean = false;
+	
 		var snelheid: int = 150;
 		var directie: int = 0;
 		var directieY: int = 0;
@@ -32,15 +35,18 @@
 		
 		function init(e:Event):void
 		{
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, ingedrukt);
-			stage.addEventListener(KeyboardEvent.KEY_UP, nietingedrukt);
-			stage.addEventListener(Event.ENTER_FRAME, loop);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, ingedrukt, false, 0, true);
+			stage.addEventListener(KeyboardEvent.KEY_UP, nietingedrukt, false, 0, true);
+			stage.addEventListener(Event.ENTER_FRAME, loop, false, 0, true);
 		}
 		
 		function loop (e:Event):void
 		{
-			this.x += directie * snelheid / stage.frameRate;
-			this.y += directieY * snelheid / stage.frameRate;
+			if(crashed == false)
+			{
+				this.x += directie * snelheid / stage.frameRate;
+				this.y += directieY * snelheid / stage.frameRate;
+			}
 			
 			//De auto mag niet buiten de witte lijnen 
 			if(this.x < min)
@@ -57,9 +63,24 @@
 			
 		}
 		
+		var timer:Timer = null;
+		public function Crashed() : void
+		{
+			crashed = true;
+			timer = new Timer(1000,1);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, StopCrash, false, 0, true);
+			timer.start();
+		}
+		
+		function StopCrash(e:TimerEvent = null) : void
+		{
+			crashed = false;
+			timer.removeEventListener(TimerEvent.TIMER_COMPLETE, StopCrash);
+		}
+		
 		public function supercar(min:int, max:int) 
 		{
-			addEventListener(Event.ADDED_TO_STAGE, init);
+			addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
 			this.min = min;
 			this.max = max;
 		}
