@@ -7,6 +7,7 @@
 	public class supercar extends MovieClip {
 
 		public var crashed:Boolean = false;
+		public var ended:Boolean = false;
 	
 		var snelheid: int = 150;
 		var directie: int = 0;
@@ -35,9 +36,16 @@
 		
 		function init(e:Event):void
 		{
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, ingedrukt, false, 0, true);
-			stage.addEventListener(KeyboardEvent.KEY_UP, nietingedrukt, false, 0, true);
-			stage.addEventListener(Event.ENTER_FRAME, loop, false, 0, true);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, ingedrukt);
+			stage.addEventListener(KeyboardEvent.KEY_UP, nietingedrukt);
+			stage.addEventListener(Event.ENTER_FRAME, loop);
+		}
+		
+		public function Remove()
+		{
+			ended = true;
+			stage.removeEventListener(Event.ENTER_FRAME, loop);
+			this.parent.removeChild(this)
 		}
 		
 		function loop (e:Event):void

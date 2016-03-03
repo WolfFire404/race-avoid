@@ -10,10 +10,10 @@
 	
 		function init(e:Event):void
 		{
-			stage.addEventListener(Event.ENTER_FRAME, move, false, 0, true);
+			stage.addEventListener(Event.ENTER_FRAME, move);
 		}
 	
-		function move(e:Event):void
+		public function move(e:Event):void
 		{
 			if(carcoolcar.crashed == false)
 				this.y += snelheid / stage.frameRate;
@@ -30,6 +30,17 @@
 				stage.removeEventListener(Event.ENTER_FRAME, move);
 				this.parent.removeChild(this);
 			}
+			
+			if(carcoolcar.ended == true)
+			{
+				stage.removeEventListener(Event.ENTER_FRAME, move);
+				this.parent.removeChild(this);
+			}
+		}
+		
+		public function Remove()
+		{
+			stage.removeEventListener(Event.ENTER_FRAME, move);
 		}
 	
 		public function scarycar(xpos:int, car:supercar) 
